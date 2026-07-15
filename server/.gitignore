@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Image Uploads
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
