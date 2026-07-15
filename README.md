@@ -8,9 +8,9 @@ A full-stack **MERN** application that digitizes the front-desk experience — r
 
 | Resource | Link |
 |---|---|
-| 🌐 Live App | *Coming soon — will be added after deployment* |
-| ⚙️ Backend API | *Coming soon — will be added after deployment* |
-| 💻 GitHub Repository | *Coming soon* |
+| 🌐 Live App | [visitor-pass-management-system-nine.vercel.app](https://visitor-pass-management-system-nine.vercel.app/) |
+| ⚙️ Backend API | [visitor-pass-management-system-w3h2.onrender.com](https://visitor-pass-management-system-w3h2.onrender.com/) |
+| 💻 GitHub Repository | [Sumitchahar317/Visitor-Pass-Management-System](https://github.com/Sumitchahar317/Visitor-Pass-Management-System) |
 
 ---
 
