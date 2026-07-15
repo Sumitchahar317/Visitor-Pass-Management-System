@@ -6,9 +6,17 @@ const api = axios.create({baseURL: import.meta.env.VITE_API_URL || "/api"})
 
 // This is a "request interceptor". runs before any request sent from client
 api.interceptors.request.use((config) => {
+    // If the baseURL is an absolute URL (starts with http), format the paths properly
+    if (config.baseURL && config.baseURL.startsWith("http")) {
+        if (!config.baseURL.endsWith("/")) {
+            config.baseURL = config.baseURL + "/";
+        }
+        if (config.url && config.url.startsWith("/")) {
+            config.url = config.url.substring(1);
+        }
+    }
 
     const token = localStorage.getItem("token");
-
     if (token) config.headers.Authorization = `Bearer ${token}`;
    
     return config;
