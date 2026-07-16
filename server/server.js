@@ -1,13 +1,13 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const path = require("path");
 // Load environment variables immediately before requiring routes and controllers
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const mongoose = require("mongoose");
 const cors = require("cors");
 const fs = require("fs");
-const path = require("path");
 
 // Ensure uploads directory exists for image uploads in production
 const uploadsDir = path.join(__dirname, "uploads");
