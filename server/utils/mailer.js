@@ -1,4 +1,3 @@
-// utils/mailer.js
 const nodemailer = require("nodemailer");
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });

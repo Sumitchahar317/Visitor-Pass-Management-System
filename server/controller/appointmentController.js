@@ -6,14 +6,15 @@ const visitorModel = require("../model/visitorModel");
 const appointmentModel = require("../model/appointmentModel");
 const { sendMail } = require("../utils/mailer");
 const { generateOrGetPass } = require("./passController");
+const { sendSMS } = require("../utils/sms");
 
 
 // emp/admin send inivation link to new visitor
 exports.createInvite = async (req, res) => {
-  const { name, email, purpose, scheduledDate } = req.body;
+  const { name, email, phone, purpose, scheduledDate } = req.body;
   
   try {
-    const visitor = await visitorModel.create({name, email});
+    const visitor = await visitorModel.create({name, email, phone});
 
     const inviteToken = crypto.randomUUID();
     
@@ -40,6 +41,13 @@ exports.createInvite = async (req, res) => {
     
     ) 
     
+    if (visitor.phone) {
+      const inviteUrl = `${process.env.CLIENT_URL}/pre-register/${inviteToken}`;
+      sendSMS(
+        visitor.phone,
+        `Hi ${visitor.name}, you have been invited to visit. Please complete your registration here: ${inviteUrl}`
+      ).catch(err => console.log("Invite SMS failed (non-fatal):", err.message));
+    }
 
     res.status(201).json({"appointment":appointment, "inviteToken" :inviteToken });
   } catch (err) {
@@ -116,7 +124,7 @@ exports.createWalkIn = async (req,res)=>{
 
       sendMail(
         visitor.email,
-        "Your visit has been approved — here's your pass",
+        "Your visit has been approved - here's your pass",
         `<p>Hi ${visitor.name},</p>
          <p>Your visit has been approved. Please show this QR code at the gate on arrival:</p>
          <img src="cid:passQr" alt="Visitor pass QR code" />
@@ -124,6 +132,14 @@ exports.createWalkIn = async (req,res)=>{
          <p>Valid: ${pass.validFrom.toLocaleString()} – ${pass.validTo.toLocaleString()}</p>`,
         [{ filename: "pass-qr.png", content: qrBuffer, cid: "passQr" }]
       ).catch(err => console.log("Pass email failed (non-fatal):", err.message));
+    }
+
+    if (visitor.phone) {
+      sendSMS(
+        visitor.phone,
+        `Hi ${visitor.name}, your visit has been approved. Please show this QR code at the gate on arrival: 
+        ${process.env.CLIENT_URL}/public/pass/${pass.qrToken}`
+      ).catch(err => console.log("Pass SMS failed (non-fatal):", err.message));
     }
 
     const qrDataUrl = await QRCode.toDataURL(pass.qrToken);
@@ -169,6 +185,13 @@ exports.approveAppointment = async(req,res)=>{
         [{ filename: "pass-qr.png", content: qrBuffer, cid: "passQr" }]
       ).catch(err => 
         console.log("Pass email failed (non-fatal):", err.message));
+    }
+     if (visitor.phone) {
+      sendSMS(
+        visitor.phone,
+        `Hi ${visitor.name}, your visit has been approved. Please show this QR code at the gate on arrival: 
+        ${process.env.CLIENT_URL}/public/pass/${pass.qrToken}`
+      ).catch(err => console.log("Pass SMS failed (non-fatal):", err.message));
     }
 
     res.status(200).json(appointment);

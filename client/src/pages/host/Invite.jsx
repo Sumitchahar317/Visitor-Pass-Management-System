@@ -3,7 +3,7 @@ import api from '../../api/axios'
 
 
 const Invite = () => {
-    const [form , setForm] = useState({name : "", email : "", purpose : "", scheduledDate : ""});
+    const [form , setForm] = useState({name : "", email : "", phone: "", purpose : "", scheduledDate : ""});
     const [message , setMessage] = useState("")
     const [error , setError] = useState("")
 
@@ -18,8 +18,8 @@ const Invite = () => {
         try{
             await api.post("/appointments/invite", form)
            
-            setMessage("Invite sent! The visitor will receive an email with their registration link.");
-            setForm({ name: "", email: "", purpose: "", scheduledDate: "" });
+            setMessage("Invite sent! The visitor will receive an email and SMS with their registration link.");
+            setForm({ name: "", email: "", phone: "", purpose: "", scheduledDate: "" });
 
         }catch(err){
             setError(err.response?.data?.message || "Failed to send invite");
@@ -49,6 +49,14 @@ const Invite = () => {
                 <label htmlFor="email" className="form-label">Email address</label>
                 <input type="email" name="email" className="form-control" id="email" 
                   value={form.email} onChange={handleChange} required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="phone" className="form-label">Phone Number</label>
+                <input type="tel" name="phone" className="form-control" id="phone" 
+                  value={form.phone} onChange={handleChange} required
+                  placeholder="e.g. +15555555555"
                 />
               </div>
 

@@ -41,7 +41,6 @@ const generateOrGetPass = async (appointment, issuedByUserId) => {
 
 exports.generateOrGetPass = generateOrGetPass;
 
-
 //issuing a visitor entry pass
 exports.issuePass = async (req, res) => {
     const appointmentId = req.params.appointmentId;
